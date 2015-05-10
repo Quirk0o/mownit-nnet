@@ -1,0 +1,18 @@
+extends layout
+
+block content
+    main.row(ng-app)
+        .small-12.columns
+            h1 Predykcja wyników z użyciem sieci neuronowych
+
+            form
+                .row
+                    input#file.small-12.columns(type='file')
+                .row
+                    #drop.small-12.columns Drop input file here
+
+                p 1 + 2 = {{ 1+2 }}
+
+            .row
+                #chart.small-12.columns
+
