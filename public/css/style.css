@@ -19,7 +19,7 @@ a {
   cursor: default;
 }
 
-#drop:hover {
+.dragover {
   border-style: solid;
 }
 
