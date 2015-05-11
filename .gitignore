@@ -4,3 +4,4 @@ public/lib
 **/*.Rout
 views/bower_stylesheets.jade
 views/bower_scripts.jade
+result.csv
