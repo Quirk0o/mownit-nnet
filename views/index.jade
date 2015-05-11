@@ -23,9 +23,9 @@ block content
                         p {{ input.files[0].name }}
                 .row
                     .progress.small-12.round
-                        span.right {{ input.progress }} %
+                        span.right {{ input.progress() }} %
                         span.meter(
-                            style='width: {{ input.progress }}%'
+                            style='width: {{ input.progress() }}%'
                         )
 
             section.row(ng-controller='ChartController as chart')

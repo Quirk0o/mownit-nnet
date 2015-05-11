@@ -1,31 +1,22 @@
 
 angular.module('simApp')
 
-    .controller('InputController', [ '$scope', 'Upload', function ($scope, Upload) {
+    .controller('InputController', [ '$scope', 'Simulate', function ($scope, Simulate) {
 
-      this.progress = 0;
+      this.progress = Simulate.getProgress;
 
       var self = this;
       $scope.$watch(angular.bind(this, function () {
         return this.files;
       }), function(value) {
-        self.upload(value);
+        self.simulate(value);
       });
 
-      this.upload = function (files) {
+      this.simulate = function (files) {
         if (!files || !files.length) return;
-
         var file = files[0];
 
-        Upload.upload({
-          url: 'upload',
-          file: file
-
-        }).progress(function (e) {
-          self.progress = parseInt(100.0 * e.loaded / e.total);
-
-        }).success(function () {
-        });
+        Simulate.upload(file);
       };
     }])
 
