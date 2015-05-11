@@ -46,6 +46,9 @@ module.exports = function (grunt) {
           spawn: false
         }
       },
+      R: {
+        files: 'app/sim.R'
+      },
       bower: {
         files: 'bower.json',
         tasks: [ 'wiredep' ]
