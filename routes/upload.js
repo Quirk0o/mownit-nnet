@@ -9,9 +9,8 @@ router.post('/', [ multer({ dest: 'uploads' }), function(req, res, next) {
   var file = req.files.file,
       cmd = 'Rscript app/sim.R uploads/' + file.name;
 
+  console.log('Executing R script');
   exec(cmd, function (err, stdout, stderr) {
-    console.log(stdout);
-
     if (err !== null) {
       console.log(err);
     }

@@ -2,10 +2,11 @@
 angular.module('simApp')
     .factory('Simulate', [ 'Upload', function (Upload) {
 
-      var progress = 0,
+      var uploaded = 0,
           result;
 
-      var self = this;
+      var listeners = [];
+
       return {
         upload: function (file) {
           if (!file) return;
@@ -15,23 +16,31 @@ angular.module('simApp')
             file: file
 
           }).progress(function (e) {
-            self.progress = parseInt(100.0 * e.loaded / e.total);
+            uploaded = parseInt(100.0 * e.loaded / e.total);
 
           }).success(function (data) {
-            self.result = data;
+            result = data;
+            listeners.forEach(function (callback) {
+              callback(data);
+            });
           });
         },
         getProgress: function () {
-          return progress;
+          return uploaded;
         },
         getResult: function () {
           return result;
+        },
+        success: function (callback) {
+          listeners.push(callback);
         }
-      }
+      };
 
     }])
 
     .factory('CSVParse', function () {
+
+      var listeners = [];
 
       var config = {
         delimiter: '',
@@ -42,6 +51,9 @@ angular.module('simApp')
         complete: function (res) {
           data = res.data;
           headers = res.meta.fields;
+          listeners.forEach(function (callback) {
+            callback(data, headers);
+          });
         },
         error: function (err) {
           console.error(err);
@@ -54,11 +66,14 @@ angular.module('simApp')
         parse: function (file) {
           Papa.parse(file, config);
         },
+        success: function (callback) {
+          listeners.push(callback);
+        },
         getData: function () {
           return data;
         },
         getHeaders: function () {
           return headers;
         }
-      }
+      };
     });

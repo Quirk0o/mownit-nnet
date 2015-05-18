@@ -23,14 +23,17 @@ block content
                         p {{ input.files[0].name }}
                 .row
                     .progress.small-12.round
-                        span.right {{ input.progress() }} %
+                        span.right {{ input.getProgress() }} %
                         span.meter(
-                            style='width: {{ input.progress() }}%'
+                            style='width: {{ input.getProgress() }}%'
                         )
 
             section.row(ng-controller='ChartController as chart')
                 highchart#chart.small-12.columns(
-                    ng-if='chart.data'
+                    ng-if='chart.config.series.length'
                     config='chart.config'
                 )
+
+                p {{ chart.getData() }}
+                p {{ chart.getHeaders() }}
 
