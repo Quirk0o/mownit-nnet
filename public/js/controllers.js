@@ -61,21 +61,50 @@ angular.module('simApp')
             var chart = HighChart.mkchart('scatter', header, []);
 
             var show = true;
-            output.forEach(function (output) {
+            console.log(output);
+            console.log('net_' + header);
+            console.log(output.indexOf('net_' + header));
+            if (output.indexOf('net_' + header) >= 0) {
+              console.log(header);
               var series = {
                 data: [],
-                name: output,
-                visible: show
+                name: 'net_' + header,
+                visible: show,
               };
-              show = false;
+
+              var guide = {
+                data: [],
+                name: 'y = x',
+                lineWidth: 1
+              };
 
               data.forEach(function (row) {
-                if (!isNaN(row[header]))
-                  series.data.push([ row[header], row[output] ]);
+                if (!isNaN(row[header])) {
+                  series.data.push([row[header], row[series.name]]);
+                  guide.data.push([row[header], row[header]]);
+                }
               });
 
               chart.config.series.push(series);
-            });
+              chart.config.series.push(guide);
+            }
+            else {
+              output.forEach(function (output) {
+                var series = {
+                  data: [],
+                  name: output,
+                  visible: show
+                };
+                show = false;
+
+                data.forEach(function (row) {
+                  if (!isNaN(row[header]))
+                    series.data.push([row[header], row[output]]);
+                });
+
+                chart.config.series.push(series);
+              });
+            }
 
             self.charts.push(chart);
           });
