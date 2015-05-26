@@ -28,9 +28,6 @@ angular.module('simApp')
         getProgress: function () {
           return uploaded;
         },
-        getResult: function () {
-          return result;
-        },
         success: function (callback) {
           listeners.push(callback);
         }
@@ -71,9 +68,28 @@ angular.module('simApp')
         },
         getData: function () {
           return data;
-        },
-        getHeaders: function () {
-          return headers;
         }
       };
-    });
+    })
+    .factory('HighChart', [ function () {
+
+      return {
+        mkchart: function (type, title, series) {
+
+          var chart = {};
+          chart.config = {
+            options: {
+              chart: {
+                type: type
+              },
+              title: {
+                text: title
+              }
+            },
+            series: series
+          };
+
+          return chart;
+        }
+      };
+    }]);

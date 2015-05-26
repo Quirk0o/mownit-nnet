@@ -20,40 +20,64 @@ angular.module('simApp')
       };
     }])
 
-    .controller('ChartController', [ '$scope', 'Simulate', 'CSVParse', function ($scope, Simulate, CSVParse) {
+    .controller('ChartController', [ '$scope', 'Simulate', 'CSVParse', 'HighChart',
+      function ($scope, Simulate, CSVParse, HighChart) {
 
-      this.config = {
-        options: {
-          chart: {
-            type: 'scatter'
-          },
-          title: {
-            text: 'Wyniki symulacji'
-          }
-        },
-        series: []
-      };
+      this.charts = [];
+      this.output = [];
 
       var self = this;
       Simulate.success(function (data) {
         CSVParse.success(function (data, headers) {
-          console.log(headers);
-          console.log(data);
 
-          var input = [ 'immunological_time_span', 'bite_transfer', 'mahalanobis', 'immunological_maturity',
-            'good_agent_energy' ];
+          output = headers.filter(function (header, index) {
+            return header.includes('net_');
+          });
+          var netdif = headers.filter(function (header, index) {
+            return header.includes('netdif_');
+          });
+          var input = headers.diff(output).diff(netdif);
 
-          input.forEach(function (header) {
-            var series = {};
-            series.data = [];
-            series.name = header;
 
+          var config = {
+            series: []
+          };
+
+          netdif.forEach(function (header) {
+            var series = {
+              data: [],
+              name: header
+            };
             data.forEach(function (row) {
-              series.data.push([ row[header], row['net_iemas_fitness'] ]);
+              series.data.push(row[header]);
             });
 
-            self.config.series.push(series);
-            console.log(series);
+            config.series.push(series);
+          });
+
+          self.charts.push(HighChart.mkchart('column', 'Błędy względne', config.series));
+
+          input.forEach(function (header) {
+            var chart = HighChart.mkchart('scatter', header, []);
+
+            var show = true;
+            output.forEach(function (output) {
+              var series = {
+                data: [],
+                name: output,
+                visible: show
+              };
+              show = false;
+
+              data.forEach(function (row) {
+                if (!isNaN(row[header]))
+                  series.data.push([ row[header], row[output] ]);
+              });
+
+              chart.config.series.push(series);
+            });
+
+            self.charts.push(chart);
           });
         });
 
