@@ -80,7 +80,8 @@ angular.module('simApp')
           chart.config = {
             options: {
               chart: {
-                type: type
+                type: type,
+                zoomType: 'xy'
               },
               title: {
                 text: title
