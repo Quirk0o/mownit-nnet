@@ -28,12 +28,9 @@ block content
                             style='width: {{ input.getProgress() }}%'
                         )
 
-            section.row(ng-controller='ChartController as chart')
-                highchart#chart.small-12.columns(
-                    ng-if='chart.config.series.length'
-                    config='chart.config'
-                )
-
-                p {{ chart.getData() }}
-                p {{ chart.getHeaders() }}
-
+            section.row(ng-controller='ChartController as display')
+                div.row(ng-repeat='chart in display.charts')
+                    highchart.small-12.columns(
+                        ng-if='chart.config.series.length'
+                        config='chart.config'
+                    )
