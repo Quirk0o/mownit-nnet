@@ -61,11 +61,7 @@ angular.module('simApp')
             var chart = HighChart.mkchart('scatter', header, []);
 
             var show = true;
-            console.log(output);
-            console.log('net_' + header);
-            console.log(output.indexOf('net_' + header));
             if (output.indexOf('net_' + header) >= 0) {
-              console.log(header);
               var series = {
                 data: [],
                 name: 'net_' + header,
